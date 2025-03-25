@@ -44,7 +44,6 @@ export class Category {
 
   @AfterUpdate()
   updateSlug() {
-    console.log('name', this.name);
     this.slug = generateSlug(
       this.name + '-' + parseFloat(`${Math.random() * 1000}`).toFixed(2),
     );
