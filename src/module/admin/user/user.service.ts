@@ -23,7 +23,6 @@ export class UserService {
 
   async updateUserByAdmin(id: number, data: UpdateUserDto) {
     const user = await this.getUserByAdmin(id);
-    console.log('user', user, data);
     if (user.email !== data.email) {
       throw new HttpException(
         ErrorMsg.CANNOT_UPDATE_EMAIL,

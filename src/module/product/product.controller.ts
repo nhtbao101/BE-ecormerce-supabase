@@ -1,14 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 
 import { ProductService } from './product.service';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('/product/')
 export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Get()
-  async getProducts() {
-    return await this.productService.getProduct();
+  @ApiQuery({ name: 'category', required: false })
+  async getProducts(@Query('category') categories?: string[]) {
+    return await this.productService.getProduct(categories);
   }
 
   @Get(':slug')

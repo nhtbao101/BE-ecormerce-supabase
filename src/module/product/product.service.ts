@@ -2,13 +2,25 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ErrorMsg } from '../../constants/error-message';
 
 import ProductRepository from '../../repository/product.repository';
+import { In } from 'typeorm';
 
 @Injectable()
 export class ProductService {
   constructor(private productRepository: ProductRepository) {}
 
-  async getProduct() {
+  async getProduct(categories?: string[]) {
+    const condition = categories
+      ? {
+          categoryId: In(
+            categories
+              .map((category: string) => +category)
+              .filter((cate) => !isNaN(cate)),
+          ),
+        }
+      : {};
+
     const prd = await this.productRepository.find({
+      where: condition,
       relations: {
         images: true,
       },
@@ -18,7 +30,6 @@ export class ProductService {
         },
       },
     });
-    console.log('prd', prd);
     return prd;
   }
 
@@ -42,4 +53,6 @@ export class ProductService {
     }
     return product;
   }
+
+  getProductByCategory;
 }
