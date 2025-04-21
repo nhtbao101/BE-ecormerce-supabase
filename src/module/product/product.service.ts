@@ -1,21 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ErrorMsg } from '../../constants/error-message';
+import { ILike } from 'typeorm';
 
-import ProductRepository from '../../repository/product.repository';
-import { In } from 'typeorm';
+import ProductRepository from 'src/repository/product.repository';
+import { ErrorMsg } from 'src/constants/error-message';
 
 @Injectable()
 export class ProductService {
   constructor(private productRepository: ProductRepository) {}
 
-  async getProduct(categories?: string[]) {
-    const condition = categories
+  async getProduct(query: { categoryId?: number; productName: string }) {
+    console.log('query getProduct', query);
+    const condition = query
       ? {
-          categoryId: In(
-            categories
-              .map((category: string) => +category)
-              .filter((cate) => !isNaN(cate)),
-          ),
+          ...(query.categoryId && {
+            categoryId: query.categoryId,
+          }),
+          name: ILike(`%${query.productName}%`),
         }
       : {};
 
