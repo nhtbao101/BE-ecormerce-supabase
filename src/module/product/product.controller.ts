@@ -8,9 +8,9 @@ export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Get()
-  @ApiQuery({ name: 'category', required: false })
-  async getProducts(@Query('category') categories?: string[]) {
-    return await this.productService.getProduct(categories);
+  @ApiQuery({ name: 'categoryId', required: false })
+  async getProducts(@Query() query: any) {
+    return await this.productService.getProduct(query);
   }
 
   @Get(':slug')
